@@ -4,3 +4,27 @@
     box-sizing: border-box;
     font-family: 'Varela Round', sans-serif;
 }
+
+#topHeading {
+    text-align: center;
+    margin: 30px;
+}
+
+#boardContainer {
+    width: 450px;
+    height: 450px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.square {
+    width: 150px;
+    height: 150px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 72pt;
+}
