@@ -1,5 +1,3 @@
-"use strict"
-
 const gameBoard = (() => {
     let _board = {
         positions: [null, null, null, null, null, null, null, null, null]
@@ -41,24 +39,20 @@ const checkResult = (board) => {
     }
 }
 
-let squares = document.querySelectorAll('.square');
-
 const displayController = (() => {
     const currentBoard = gameBoard._board;
     let _moveCounter = 0;
-    let _previousCounter = _moveCounter;
 
     const clearBoard = () => {
-        _moveCounter = _previousCounter === 0 ? 1 : 0;
         currentBoard.positions = [null, null, null, null, null, null, null, null, null]
         squares.forEach((square) => {
             square.textContent = '';
         })
     }
 
-    const resetBoard = () => {
+    const resetBoard = (previousWinner) => {
+        _moveCounter = previousWinner % 2 === 0 ? 1 : 0;
         clearBoard();
-        enablePositions();
     }
 
     const enablePositions = () => {
@@ -72,41 +66,77 @@ const displayController = (() => {
         })
     }
 
-    // for disabling play until names are entered * add to return
-    // const disablePositions = () => {
-    //     squares.forEach((square) => {
-    //         square.status = true;
-    //     })
-    // }
-
     const playMove = (square, id) => {
         if (currentBoard.positions[id] === null) {
+            let currentPlayer;
+            let otherPlayer;
             if (_moveCounter % 2 == 0) {
-                square.textContent = 'X';
-                currentBoard.positions[id] = 'X';
-                console.log(checkResult(currentBoard.positions));
-                if (checkResult(currentBoard.positions) == true) {
-                    alert(playerX.getName() + ' wins!');
-                    resetBoard();
-                }
+                currentPlayer = playerX;
+                otherPlayer = playerO;
+                square.textContent = currentPlayer.getMark();
+                currentBoard.positions[id] = currentPlayer.getMark();
             } else {
-                square.textContent = 'O';
-                currentBoard.positions[id] = 'O';
-                console.log(checkResult(currentBoard.positions));
-                if (checkResult(currentBoard.positions) == true) {
-                    alert(playerO.getName() + ' wins!');
-                    resetBoard();
-                }
+                currentPlayer = playerO;
+                otherPlayer = playerX;
+                square.textContent = currentPlayer.getMark();
+                currentBoard.positions[id] = currentPlayer.getMark();
             }
             _moveCounter++;
+            if (checkResult(currentBoard.positions) == true) {
+                setTimeout(() => {
+                    alert(currentPlayer.getName() + ' wins!');
+                    if (currentPlayer.getMark() == 'X') {
+                        resetBoard(0);
+                        enablePositions();
+                    } else {
+                        resetBoard(1);
+                        enablePositions();
+                    }
+                }, 100);
+            } else {
+                if (currentBoard.positions.includes(null)) {
+                    return;
+                } else {
+                    setTimeout(() => {
+                        alert('It\'s a draw!');
+                        if (currentPlayer.getMark() == 'X') {
+                            resetBoard(0);
+                            enablePositions();
+                        } else {
+                            resetBoard(1);
+                            enablePositions();
+                        }
+                    }, 100);
+                }
+            }
         } else {
             return;
         }
     }
     return { enablePositions, resetBoard, playMove }
-})(document)
+})()
 
 let display = displayController;
-display.enablePositions();
-let playerX = Player('First', 'X');
-let playerO = Player('Second', 'O');
+let playerX;
+let playerO;
+
+let squares = document.querySelectorAll('.square');
+
+let startButton = document.querySelector('#startButton');
+startButton.addEventListener('click', () => {
+    let playerXName = document.querySelector('#playerXName').value;
+    let playerOName = document.querySelector('#playerOName').value;
+
+    if (playerXName == '' || playerOName == '') {
+        alert('Please enter player names.');
+    } else {
+        playerX = Player(playerXName, 'X');
+        playerO = Player(playerOName, 'O');
+        display.enablePositions();
+    }
+})
+
+let resetButton = document.querySelector('#resetButton');
+resetButton.addEventListener('click', () => {
+    window.location.reload();
+})
