@@ -103,7 +103,7 @@ button {
     display: flex;
     justify-content: center;
     align-items: baseline;
-    font-size: 40pt;
+    font-size: 36pt;
     font-family: 'Mali', 'Varela Round', sans-serif;
     cursor: pointer;
 }
