@@ -74,11 +74,14 @@ const displayController = (() => {
                 currentPlayer = playerX;
                 otherPlayer = playerO;
                 square.textContent = currentPlayer.getMark();
+                square.style.color = 'hsl(115, 100%, 70%)';
+                square.style.fontFamily = '\'Mali\'';
                 currentBoard.positions[id] = currentPlayer.getMark();
             } else {
                 currentPlayer = playerO;
                 otherPlayer = playerX;
                 square.textContent = currentPlayer.getMark();
+                square.style.color = 'hsl(0, 100%, 70%)';
                 currentBoard.positions[id] = currentPlayer.getMark();
             }
             _moveCounter++;
@@ -121,7 +124,6 @@ let playerX;
 let playerO;
 
 let squares = document.querySelectorAll('.square');
-
 let startButton = document.querySelector('#startButton');
 startButton.addEventListener('click', () => {
     let playerXName = document.querySelector('#playerXName').value;
