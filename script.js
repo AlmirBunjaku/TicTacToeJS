@@ -29,6 +29,7 @@ const checkResult = (board) => {
 
     for (let i = 0; i < winningResults.length; i++) {
         let currentCombination = winningResults[i];
+        winningCombination = currentCombination;
         if (board[currentCombination[0]] && board[currentCombination[0]] === board[currentCombination[1]] && board[currentCombination[1]] === board[currentCombination[2]]) {
             return true; // win
         }
@@ -47,6 +48,8 @@ const displayController = (() => {
         currentBoard.positions = [null, null, null, null, null, null, null, null, null]
         squares.forEach((square) => {
             square.textContent = '';
+            square.style.color = 'hsl(291, 7%, 60%)';
+            square.style.fontWeight = 'normal';
         })
     }
 
@@ -74,18 +77,21 @@ const displayController = (() => {
                 currentPlayer = playerX;
                 otherPlayer = playerO;
                 square.textContent = currentPlayer.getMark();
-                square.style.color = 'hsl(115, 100%, 70%)';
-                square.style.fontFamily = '\'Mali\'';
                 currentBoard.positions[id] = currentPlayer.getMark();
             } else {
                 currentPlayer = playerO;
                 otherPlayer = playerX;
                 square.textContent = currentPlayer.getMark();
-                square.style.color = 'hsl(0, 100%, 70%)';
                 currentBoard.positions[id] = currentPlayer.getMark();
             }
             _moveCounter++;
             if (checkResult(currentBoard.positions) == true) {
+                document.querySelector('#square' + winningCombination[0]).style.color = 'hsl(115, 90%, 30%)';
+                document.querySelector('#square' + winningCombination[1]).style.color = 'hsl(115, 90%, 30%)';
+                document.querySelector('#square' + winningCombination[2]).style.color = 'hsl(115, 90%, 30%)';
+                document.querySelector('#square' + winningCombination[0]).style.fontWeight = 'bold';
+                document.querySelector('#square' + winningCombination[1]).style.fontWeight = 'bold';
+                document.querySelector('#square' + winningCombination[2]).style.fontWeight = 'bold';
                 setTimeout(() => {
                     alert(currentPlayer.getName() + ' wins!');
                     if (currentPlayer.getMark() == 'X') {
@@ -122,6 +128,7 @@ const displayController = (() => {
 let display = displayController;
 let playerX;
 let playerO;
+let winningCombination;
 
 let squares = document.querySelectorAll('.square');
 let startButton = document.querySelector('#startButton');
